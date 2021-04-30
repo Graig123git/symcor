@@ -14,20 +14,10 @@ const SignUpForm = () => {
 
 	const handleSubmit = async (e) => {
 		try {
-			const Url = 'xxx';
-			let axiosConfig = {
-				headers: {
-					'x-api-key': 'xxx',
-					Host: 'x',
-					'x-request-id': 'x',
-					'x-fapi': 'x',
-					'x-app-cat-id': 'x',
-				},
-			};
-			const base64String = await axios.post(Url, axiosConfig);
-			console.info(base64String);
-		} catch (error) {
-			alert(error);
+			const response = await axios.post(`http://localhost:8080/api/create/`);
+			alert(JSON.stringify(response));
+		} catch (err) {
+			alert(err.message);
 		}
 	};
 
