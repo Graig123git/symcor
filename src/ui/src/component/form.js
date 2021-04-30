@@ -14,7 +14,7 @@ const SignUpForm = () => {
 
 	const handleSubmit = async (e) => {
 		try {
-			const response = await axios.post(`http://localhost:8080/api/create/`);
+			const response = await axios.post(`api/create/`);
 			alert(JSON.stringify(response));
 		} catch (err) {
 			alert(err.message);
