@@ -8,17 +8,17 @@ router.post('/create', async (req, res) => {
 		const Url = 'xxx';
 		let axiosConfig = {
 			headers: {
-				'x-api-key': 'xxx',
-				Host: 'xxx',
+				'x-api-key': 'xx',
+				Host: 'xx',
 				'x-request-id': 'xxx',
-				'x-fapi': '1',
+				'x-fapi': 'xxx',
 				'x-app-cat-id': 'xxx',
 			},
 		};
-		const base64String = await axios.post(Url, axiosConfig);
+		const base64String = await axios.post(Url, req.body, axiosConfig);
 		return res.send({ statusCode: 200, data: base64String });
 	} catch (error) {
-		res.send({ err: error, status: 500 });
+		res.send({ err: error.message, status: 500 });
 	}
 });
 
