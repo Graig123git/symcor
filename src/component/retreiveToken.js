@@ -9,6 +9,7 @@ function RetreiveToken() {
 		bmoParterId: Yup.string().required('*Required'),
 		clinetSecret: Yup.string().required('*Required'),
 		PublicKey: Yup.string().required('*Required'),
+		apiKey: Yup.string().required('*Required'),
 	});
 	return (
 		<Formik
@@ -17,6 +18,7 @@ function RetreiveToken() {
 				bmoParterId: '',
 				clinetSecret: '',
 				PublicKey: '',
+				apiKey: '',
 			}}
 			validationSchema={validate}
 		>
@@ -30,6 +32,7 @@ function RetreiveToken() {
 								<TextField label='Encoded String' name='base64Arn' type='text' />
 								<TextField label='Clinet Secret' name='clinetSecret' type='text' />
 								<TextField label='Public Key' name='PublicKey' type='text' />
+								<TextField label='Client API KEY' name='apiKey' type='text' />
 							</div>
 							<div className='d-flex justify-content-center'>
 								<button className='btn btn-primary mt-3 col-sm-6 mb-5' type='submit'>
