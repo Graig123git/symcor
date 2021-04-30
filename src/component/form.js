@@ -3,12 +3,34 @@ import { TextField } from './textField';
 import './form.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import * as Yup from 'yup';
-function SignUpForm() {
+import axios from 'axios';
+
+const SignUpForm = () => {
 	const validate = Yup.object({
 		clientName: Yup.string().required('*Required'),
 		publicKey: Yup.string().required('*Required'),
 		secretDescription: Yup.string().required('*Required'),
 	});
+
+	const handleSubmit = async (e) => {
+		try {
+			const Url = 'xxx';
+			let axiosConfig = {
+				headers: {
+					'x-api-key': 'xxx',
+					Host: 'x',
+					'x-request-id': 'x',
+					'x-fapi': 'x',
+					'x-app-cat-id': 'x',
+				},
+			};
+			const base64String = await axios.post(Url, axiosConfig);
+			console.info(base64String);
+		} catch (error) {
+			alert(error);
+		}
+	};
+
 	return (
 		<Formik
 			initialValues={{
@@ -20,6 +42,7 @@ function SignUpForm() {
 				checked: [],
 			}}
 			validationSchema={validate}
+			onSubmit={handleSubmit}
 		>
 			{(formik) => (
 				<div>
@@ -69,6 +92,6 @@ function SignUpForm() {
 			)}
 		</Formik>
 	);
-}
+};
 
 export default SignUpForm;
