@@ -1,0 +1,23 @@
+.header {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	position: relative;
+	background-color: #0075be;
+	height: 70px;
+}
+
+.btn-primary {
+	background-color: #0075be !important;
+	border: none !important;
+}
+
+.text-color {
+	color: #0075be;
+}
+
+.textFont {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+}

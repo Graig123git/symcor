@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
+import { Spinner } from 'react-activity';
+import 'react-activity/dist/react-activity.css';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from './textField';
-import CheckBoxGroup from './checkBoxgroup';
 import './form.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -12,41 +14,45 @@ const SignUpForm = () => {
 	const [successData, setsuccessData] = useState('');
 	const [error, setError] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
-	const checkBoxOptions = [
-		{ key: 'Option 1', value: 'accountinfo' },
-		{ key: 'Option 2', value: 'deleteaccountinfo' },
-		{ key: 'Option 3', value: 'updateaccountinfo' },
-	];
+	const [isLoading, setIsloading] = useState(false);
 
 	const validate = Yup.object({
 		clientName: Yup.string().required('*Required'),
 		publicKey: Yup.string().required('*Required'),
 		secretDescription: Yup.string().required('*Required'),
-		//checkboxOption: Yup.array().length(1, 'Required').required('Required'),
+		checked: Yup.array().min(1, 'at least one must be selected'),
 	});
 
 	const handleSubmit = async (e) => {
 		try {
+			setIsloading(true);
+			const scope = e.checked.map((x) => {
+				return {
+					ScopeName: x,
+				};
+			});
 			const params = {
 				clientName: e.clientName,
 				publicKey: e.publicKey,
 				secretDescription: e.secretDescription,
-				clientScope: [],
+				clientScope: scope,
 			};
 			const response = await axios.post(`api/create/`, params);
-			console.log(response);
 			if (response.data.data) {
 				setError(false);
 				setErrorMessage('');
 				setsuccessData(JSON.stringify(response.data));
 				setSuccess(true);
+				setIsloading(false);
 			} else {
 				setSuccess(false);
 				setsuccessData('');
 				setErrorMessage(JSON.stringify(response.data));
 				setError(true);
+				setIsloading(false);
 			}
 		} catch (err) {
+			setIsloading(false);
 			alert(err);
 		}
 	};
@@ -58,7 +64,8 @@ const SignUpForm = () => {
 					clientName: '',
 					publicKey: '',
 					secretDescription: '',
-					checkBoxOption: [],
+					toggle: false,
+					checked: [],
 				}}
 				validationSchema={validate}
 				onSubmit={handleSubmit}
@@ -75,19 +82,36 @@ const SignUpForm = () => {
 									<TextField label='Secret Description' name='secretDescription' type='text' />
 								</div>
 								<div className='mb-4'>
-									<div className='mb-4'>
-										<span>Scope</span>
+									<div id='checkbox-group' className='mb-5'>
+										<span className='textFont'>Scope</span>
 									</div>
-									<CheckBoxGroup control='checkbox' name='checkBoxOption' options={checkBoxOptions} />
+									<div role='group' aria-labelledby='checkbox-group' className='d-flex justify-content-between'>
+										<label>
+											<span className='pr-1 textFont'>accountInfo</span>
+											<Field type='checkbox' name='checked' value='accountInfo' />
+										</label>
+										<label>
+											<span className='pr-1 textFont'>eligibility</span>
+											<Field type='checkbox' name='checked' value='eligibility' />
+										</label>
+										<label>
+											<span className='pr-1 textFont'>paymentinit</span>
+											<Field type='checkbox' name='checked' value='paymentinit' />
+										</label>
+									</div>
 								</div>
 								<div className='d-flex justify-content-center'>
-									<button className='btn btn-primary mt-3 col-sm-6 mb-5' type='submit'>
-										Register
+									<button
+										disabled={isLoading ? true : false}
+										className='btn btn-primary mt-3 col-sm-6 mb-5'
+										type='submit'
+									>
+										{isLoading ? <Spinner size={25} color='#00778F' /> : <span className='textFont'>Register</span>}
 									</button>
 								</div>
 								{success ? (
 									<div className='mb-4'>
-										<span className='text-success'>{successData}</span>
+										<span className='text-success textFont'>{successData}</span>
 									</div>
 								) : null}
 
@@ -99,10 +123,14 @@ const SignUpForm = () => {
 
 								<div className='d-flex justify-content-between'>
 									<div>
-										<Link to='/getToken'>Already Registered ? Retrieve Token</Link>
+										<Link to='/getToken'>
+											<span className='text-color textFont'>Already Registered ? Retrieve Token</span>
+										</Link>
 									</div>
 									<div>
-										<Link to='/'>Update Account</Link>
+										<Link to='/'>
+											<span className='text-color textFont'>Update Account</span>
+										</Link>
 									</div>
 								</div>
 							</Form>
